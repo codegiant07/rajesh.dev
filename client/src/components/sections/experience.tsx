@@ -3,36 +3,38 @@ import { GraduationCap, Award, Network } from 'lucide-react';
 
 export function Experience() {
   const experience = {
-    title: "Computer Programming Tutor",
-    company: "Dept. of CSE, GGCT, Jabalpur",
-    date: "October 2022",
+    title: "Software Development Engineer I",
+    company: "Jio Platforms Limited",
+    date: "Dec 2023 – Present",
     responsibilities: [
-      "Conducted programming tutorials and guided students in coding practices",
-      "Helped students understand complex programming concepts",
-      "Mentored students in competitive programming techniques"
+      "Developed and maintained scalable React Native mobile applications such as MyJio, JioMart, and Sephora, used by millions of users",
+      "Implemented dynamic and configurable UI components (e.g., carousels and dashboards) driven by backend configuration, reducing hard-coded logic and improving reusability",
+      "Optimized performance and responsiveness by identifying bottlenecks within the codebase",
+      "Conducted code reviews, executed unit tests, and collaborated with backend, design, QA, and product teams to deliver reliable, production-ready features in Agile sprints",
+      "Debugged and resolved production issues, improving application stability and reducing crash rates"
     ]
   };
 
   const certifications = [
     {
       icon: Award,
-      title: "TCS ION Career Edge",
-      subtitle: "Young Professional & Communication Skills",
-      category: "FOR SOFT SKILLS",
+      title: "Mobile Development Expertise",
+      subtitle: "iOS & Android App Development",
+      category: "TECHNICAL SKILLS",
       color: "text-blue-500"
     },
     {
       icon: GraduationCap,
-      title: "BIZGURUKUL",
-      subtitle: "Personality Development",
-      category: "FOR SOFT SKILLS",
+      title: "State Management",
+      subtitle: "Redux & React Hooks",
+      category: "TECHNICAL SKILLS",
       color: "text-purple-500"
     },
     {
       icon: Network,
-      title: "NETACAD (CISCO)",
-      subtitle: "Programming Essentials & Networking",
-      category: "FOR TECHNICAL SKILLS",
+      title: "Production Experience",
+      subtitle: "Apps serving millions of users",
+      category: "PROFESSIONAL",
       color: "text-green-500"
     }
   ];

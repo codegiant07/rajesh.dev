@@ -10,9 +10,9 @@ export function Hero() {
   ];
 
   const typewriterTexts = [
-    'Competitive Programmer | Full-Stack Developer | Tech Enthusiast',
-    'Problem Solver | Code Enthusiast | Innovation Driver',
-    'Building the Future with Code | LeetCode Expert'
+    'React Native Engineer | Mobile App Developer | Tech Enthusiast',
+    '1.5+ Years Experience | Building Apps for Millions of Users',
+    'iOS & Android Development | Configuration-Driven UI Expert'
   ];
 
   return (
@@ -69,15 +69,17 @@ export function Hero() {
             Hire Me
           </motion.button>
           
-          <motion.button 
-            className="px-8 py-4 glass border border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-white transition-all duration-300"
+          <motion.a 
+            href="/resume.pdf"
+            download="Rajesh_Chouhan_Resume.pdf"
+            className="px-8 py-4 glass border border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-white transition-all duration-300 inline-block"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-testid="button-download-resume"
           >
             <Download className="inline mr-2" size={20} />
             Download Resume
-          </motion.button>
+          </motion.a>
         </motion.div>
         
         {/* Social Links */}

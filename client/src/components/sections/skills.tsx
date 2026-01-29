@@ -1,20 +1,22 @@
 import { motion } from 'framer-motion';
-import { SiPython, SiCplusplus, SiJavascript, SiReact, SiNodedotjs, SiMongodb, SiMysql, SiGit, SiHtml5, SiCss3, SiFlutter, SiOpenjdk } from 'react-icons/si';
+import { SiReact, SiJavascript, SiTypescript, SiSwift, SiAndroid, SiRedux, SiCplusplus, SiMysql, SiGit, SiHtml5, SiCss3, SiXcode } from 'react-icons/si';
+import { Code2 } from 'lucide-react';
 
 export function Skills() {
   const skills = [
-    { icon: SiOpenjdk, name: "Java", color: "text-red-500" },
-    { icon: SiPython, name: "Python", color: "text-blue-500" },
-    { icon: SiCplusplus, name: "C++", color: "text-purple-500" },
+    { icon: SiReact, name: "React Native", color: "text-cyan-500" },
     { icon: SiJavascript, name: "JavaScript", color: "text-yellow-500" },
-    { icon: SiReact, name: "React", color: "text-cyan-500" },
-    { icon: SiNodedotjs, name: "Node.js", color: "text-green-500" },
-    { icon: SiMongodb, name: "MongoDB", color: "text-green-600" },
-    { icon: SiMysql, name: "MySQL", color: "text-blue-600" },
+    { icon: SiTypescript, name: "TypeScript", color: "text-blue-500" },
+    { icon: SiSwift, name: "SwiftUI", color: "text-orange-500" },
+    { icon: SiAndroid, name: "Android", color: "text-green-500" },
+    { icon: SiRedux, name: "Redux", color: "text-purple-500" },
+    { icon: SiCplusplus, name: "C++", color: "text-blue-600" },
+    { icon: SiMysql, name: "SQL", color: "text-blue-600" },
     { icon: SiGit, name: "Git", color: "text-red-600" },
     { icon: SiHtml5, name: "HTML5", color: "text-orange-600" },
     { icon: SiCss3, name: "CSS3", color: "text-blue-600" },
-    { icon: SiFlutter, name: "Flutter", color: "text-indigo-500" },
+    { icon: SiXcode, name: "Xcode", color: "text-blue-400" },
+    { icon: Code2, name: "VS Code", color: "text-cyan-400" },
   ];
 
   return (

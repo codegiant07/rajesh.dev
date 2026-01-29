@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Github, Linkedin, Code, Twitter, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Code, Twitter, Send, CheckCircle, XCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { insertContactMessageSchema, type InsertContactMessage } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 export function Contact() {
   const { toast } = useToast();
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
   const form = useForm<InsertContactMessage>({
     resolver: zodResolver(insertContactMessageSchema),
@@ -25,18 +27,22 @@ export function Contact() {
       return apiRequest('POST', '/api/contact', data);
     },
     onSuccess: () => {
+      setSubmitStatus('success');
       toast({
         title: "Message sent successfully!",
         description: "Thank you for your message. I'll get back to you soon.",
       });
       form.reset();
+      setTimeout(() => setSubmitStatus('idle'), 5000);
     },
     onError: (error) => {
+      setSubmitStatus('error');
       toast({
         title: "Failed to send message",
         description: error.message,
         variant: "destructive",
       });
+      setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   });
 
@@ -85,7 +91,7 @@ export function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <Mail className="text-xl text-blue-500 mr-4" />
-                  <span className="text-muted-foreground">rajesh.chouhan@example.com</span>
+                  <span className="text-muted-foreground">rajeshchouhancs25@gmail.com</span>
                 </motion.div>
                 <motion.div 
                   className="flex items-center"
@@ -93,7 +99,7 @@ export function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <Phone className="text-xl text-green-500 mr-4" />
-                  <span className="text-muted-foreground">+91 9876543210</span>
+                  <span className="text-muted-foreground">+91-9399690498</span>
                 </motion.div>
                 <motion.div 
                   className="flex items-center"
@@ -142,6 +148,36 @@ export function Contact() {
               data-testid="contact-form"
             >
               <h3 className="text-2xl font-bold mb-6 text-primary">Send Message</h3>
+              
+              {/* Success/Error Alert */}
+              {submitStatus === 'success' && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 p-4 bg-green-500/20 border border-green-500 rounded-lg flex items-center gap-2"
+                >
+                  <CheckCircle className="text-green-500" size={20} />
+                  <div>
+                    <p className="font-semibold text-green-500">Message sent successfully!</p>
+                    <p className="text-sm text-green-400">Thank you for reaching out. I'll get back to you soon.</p>
+                  </div>
+                </motion.div>
+              )}
+              
+              {submitStatus === 'error' && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg flex items-center gap-2"
+                >
+                  <XCircle className="text-red-500" size={20} />
+                  <div>
+                    <p className="font-semibold text-red-500">Failed to send message</p>
+                    <p className="text-sm text-red-400">Please try again or contact me directly via email.</p>
+                  </div>
+                </motion.div>
+              )}
+              
               <div className="space-y-4">
                 <motion.input
                   {...form.register('name')}

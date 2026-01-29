@@ -3,31 +3,19 @@ import { Trophy, Medal, Star, Award, Crown } from 'lucide-react';
 
 export function About() {
   const achievements = [
-    { icon: Trophy, text: "Solved 200+ Problems on LeetCode & GeeksforGeeks", color: "text-yellow-500" },
-    { icon: Medal, text: "75% in IIT-JEE Mains 2020", color: "text-blue-500" },
-    { icon: Star, text: "5 Star in C++ at HackerRank, 2 Star MySQL", color: "text-green-500" },
-    { icon: Award, text: "Central Sector Scholarship - Top 10% CSE Students", color: "text-purple-500" },
-    { icon: Crown, text: "3rd Rank at District Level - 10th Board Exam", color: "text-red-500" },
+    { icon: Trophy, text: "Solved 250+ DSA Problems on LeetCode & GeeksforGeeks", color: "text-yellow-500" },
+    { icon: Star, text: "Apps serving millions of users with stable features", color: "text-blue-500" },
+    { icon: Medal, text: "Resolved critical production crashes in iOS & React Native", color: "text-green-500" },
+    { icon: Award, text: "Central Sector Scholarship - Top 10% CSE Batch", color: "text-purple-500" },
+    { icon: Crown, text: "1.5+ Years Experience at Jio Platforms Limited", color: "text-red-500" },
   ];
 
   const education = [
     {
       degree: "Bachelor of Technology - Computer Science & Engineering",
-      institution: "Gyan Ganga College Of Technology, Jabalpur",
-      details: "CGPA: 8.69 | July 2019 - May 2023",
+      institution: "Gyan Ganga College of Technology",
+      details: "CGPA: 8.78 | July 2019 - May 2023",
       location: "Jabalpur, MP"
-    },
-    {
-      degree: "Higher Secondary (12th)",
-      institution: "Pt J L Nehru Hr. Sec. School, Chakki Khamariya",
-      details: "88.4% | July 2018 - March 2019",
-      location: "Seoni, MP"
-    },
-    {
-      degree: "High School (10th)",
-      institution: "Pt J L Nehru Hr. Sec. School, Chakki Khamariya",
-      details: "94% | July 2016 - March 2017",
-      location: "Seoni, MP"
     }
   ];
 
@@ -45,8 +33,8 @@ export function About() {
             About Me
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            I'm a passionate Computer Science Engineering graduate from Gyan Ganga College of Technology, Jabalpur. 
-            With a strong foundation in competitive programming and full-stack development, I love solving complex problems and building innovative solutions.
+            React Native Engineer with 1.5+ years of experience building and maintaining large-scale mobile applications used by millions of users. 
+            Strong in configuration-driven UI, state management, performance optimization, and production issue debugging across iOS and Android platforms.
           </p>
         </motion.div>
         

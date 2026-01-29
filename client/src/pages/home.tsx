@@ -52,7 +52,7 @@ export default function Home() {
         data-testid="footer"
       >
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-muted-foreground mb-4">© 2024 Rajesh Chouhan. All rights reserved.</p>
+          <p className="text-muted-foreground mb-4">© 2026 Rajesh Chouhan. All rights reserved.</p>
           <p className="text-sm text-muted-foreground">Built with passion for technology and innovation</p>
         </div>
       </motion.footer>
