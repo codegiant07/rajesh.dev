@@ -1,19 +1,41 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Github, Linkedin, Code, Twitter, Send, CheckCircle, XCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { insertContactMessageSchema, type InsertContactMessage } from '@shared/schema';
-import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
+
+/** Prevents hung network calls from leaving the submit button stuck on "Sending..." */
+function rejectAfter(ms: number, message: string): Promise<never> {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error(message)), ms);
+  });
+}
+
+type ContactFormValues = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
 
 export function Contact() {
   const { toast } = useToast();
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? '';
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? '';
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '';
+
+  useEffect(() => {
+    if (publicKey) {
+      // SDK uses `||` when merging options; set headless policy here so `false` is not dropped.
+      emailjs.init({ publicKey, blockHeadless: false });
+    }
+  }, [publicKey]);
   
-  const form = useForm<InsertContactMessage>({
-    resolver: zodResolver(insertContactMessageSchema),
+  const form = useForm({
     defaultValues: {
       name: '',
       email: '',
@@ -22,37 +44,146 @@ export function Contact() {
     }
   });
 
-  const contactMutation = useMutation({
-    mutationFn: async (data: InsertContactMessage) => {
-      return apiRequest('POST', '/api/contact', data);
-    },
-    onSuccess: () => {
-      setSubmitStatus('success');
+  const onSubmit = async (data: ContactFormValues) => {
+    const name = data.name?.trim();
+    const email = data.email?.trim();
+    const message = data.message?.trim();
+    const subject = data.subject?.trim() || '(No subject)';
+
+    if (!name || !email || !message) {
       toast({
-        title: "Message sent successfully!",
-        description: "Thank you for your message. I'll get back to you soon.",
-      });
-      form.reset();
-      setTimeout(() => setSubmitStatus('idle'), 5000);
-    },
-    onError: (error) => {
-      setSubmitStatus('error');
-      toast({
-        title: "Failed to send message",
-        description: error.message,
+        title: "Missing required fields",
+        description: "Please fill in name, email, and message.",
         variant: "destructive",
       });
-      setTimeout(() => setSubmitStatus('idle'), 5000);
+      return;
     }
-  });
 
-  const onSubmit = (data: InsertContactMessage) => {
-    contactMutation.mutate(data);
+    const payload = { name, email, subject, message };
+
+    setIsSubmitting(true);
+
+    const emailJsErrorText = (err: unknown): string => {
+      if (err && typeof err === "object" && "text" in err) {
+        const t = String((err as { text: string }).text);
+        try {
+          const parsed = JSON.parse(t) as { message?: string; error?: string };
+          return parsed.message || parsed.error || t;
+        } catch {
+          return t || "Unknown EmailJS error";
+        }
+      }
+      if (err instanceof Error) return err.message;
+      return "Unknown error";
+    };
+
+    try {
+      let emailJsOk = false;
+      let lastEmailJsError = "";
+
+      if (serviceId && templateId && publicKey) {
+        try {
+          await Promise.race([
+            emailjs.send(
+              serviceId,
+              templateId,
+              {
+                from_name: name,
+                from_email: email,
+                reply_to: email,
+                subject,
+                message,
+                name,
+                email,
+              },
+              publicKey,
+            ),
+            rejectAfter(
+              25_000,
+              "EmailJS timed out (no response). Check network or try again.",
+            ),
+          ]);
+          emailJsOk = true;
+        } catch (emailJsErr) {
+          lastEmailJsError = emailJsErrorText(emailJsErr);
+          console.warn("EmailJS send failed, trying server API:", emailJsErr);
+        }
+      }
+
+      if (!emailJsOk) {
+        const ac = new AbortController();
+        const fetchTimer = setTimeout(() => ac.abort(), 25_000);
+        let res: Response;
+        try {
+          res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            signal: ac.signal,
+          });
+        } catch (fetchErr) {
+          if (fetchErr instanceof Error && fetchErr.name === "AbortError") {
+            throw new Error(
+              lastEmailJsError ||
+                "Request timed out. Is the dev server running on this origin?",
+            );
+          }
+          throw fetchErr;
+        } finally {
+          clearTimeout(fetchTimer);
+        }
+        const json = (await res.json().catch(() => ({}))) as {
+          success?: boolean;
+          message?: string;
+        };
+        if (!res.ok || json.success === false) {
+          throw new Error(
+            lastEmailJsError ||
+              json.message ||
+              `Server error (${res.status})`,
+          );
+        }
+        setSubmitStatus("success");
+        toast({
+          title: lastEmailJsError
+            ? "Saved locally — EmailJS failed"
+            : "Message sent successfully!",
+          description: lastEmailJsError
+            ? `${lastEmailJsError} Fix EmailJS (template To field, service test, allowed domains), then try again.`
+            : "Thank you for your message. I'll get back to you soon.",
+          variant: lastEmailJsError ? "destructive" : "default",
+        });
+        form.reset();
+        setTimeout(() => setSubmitStatus("idle"), 8000);
+        return;
+      }
+
+      setSubmitStatus("success");
+      toast({
+        title: "Message sent successfully!",
+        description:
+          "Thank you for your message. If no email arrives in a few minutes, check Spam and EmailJS → History.",
+      });
+      form.reset();
+      setTimeout(() => setSubmitStatus("idle"), 5000);
+    } catch (err: unknown) {
+      const text =
+        err instanceof Error ? err.message : "Something went wrong.";
+      setSubmitStatus("error");
+      toast({
+        title: "Failed to send message",
+        description: text,
+        variant: "destructive",
+      });
+      setTimeout(() => setSubmitStatus("idle"), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+    { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
     { icon: Code, href: "https://leetcode.com", label: "LeetCode" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   ];
@@ -142,7 +273,7 @@ export function Contact() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <form 
+            <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="glass rounded-2xl p-6"
               data-testid="contact-form"
@@ -179,64 +310,75 @@ export function Contact() {
               )}
               
               <div className="space-y-4">
-                <motion.input
-                  {...form.register('name')}
+                <input
+                  {...form.register("name", { required: "Name is required" })}
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="Your Name *"
+                  autoComplete="name"
                   className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
-                  whileFocus={{ scale: 1.02 }}
                   data-testid="input-name"
                 />
                 {form.formState.errors.name && (
-                  <p className="text-destructive text-sm">{form.formState.errors.name.message}</p>
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.name.message}
+                  </p>
                 )}
-                
-                <motion.input
-                  {...form.register('email')}
+
+                <input
+                  {...form.register("email", {
+                    required: "Email is required",
+                  })}
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="Your Email *"
+                  autoComplete="email"
                   className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
-                  whileFocus={{ scale: 1.02 }}
                   data-testid="input-email"
                 />
                 {form.formState.errors.email && (
-                  <p className="text-destructive text-sm">{form.formState.errors.email.message}</p>
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.email.message}
+                  </p>
                 )}
-                
-                <motion.input
-                  {...form.register('subject')}
+
+                <input
+                  {...form.register("subject")}
                   type="text"
-                  placeholder="Subject"
+                  placeholder="Subject (Optional)"
+                  autoComplete="off"
                   className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
-                  whileFocus={{ scale: 1.02 }}
                   data-testid="input-subject"
                 />
                 {form.formState.errors.subject && (
-                  <p className="text-destructive text-sm">{form.formState.errors.subject.message}</p>
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.subject.message}
+                  </p>
                 )}
-                
-                <motion.textarea
-                  {...form.register('message')}
-                  placeholder="Your Message"
+
+                <textarea
+                  {...form.register("message", {
+                    required: "Message is required",
+                  })}
+                  placeholder="Your Message *"
                   rows={5}
                   className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 resize-none"
-                  whileFocus={{ scale: 1.02 }}
                   data-testid="textarea-message"
                 />
                 {form.formState.errors.message && (
-                  <p className="text-destructive text-sm">{form.formState.errors.message.message}</p>
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.message.message}
+                  </p>
                 )}
-                
+
                 <motion.button
                   type="submit"
-                  disabled={contactMutation.isPending}
+                  disabled={isSubmitting}
                   className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 disabled:opacity-50"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   data-testid="button-send-message"
                 >
                   <Send className="inline mr-2" size={16} />
-                  {contactMutation.isPending ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </motion.button>
               </div>
             </form>

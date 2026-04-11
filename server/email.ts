@@ -12,23 +12,37 @@ const EMAIL_CONFIG = {
 
 const RECIPIENT_EMAIL = 'rajeshchouhancs25@gmail.com';
 
-// Create transporter
+// Create transporter when Gmail app credentials are configured (optional; contact form can use EmailJS)
 const createTransporter = () => {
-  try {
-    return nodemailer.createTransport(EMAIL_CONFIG);
-  } catch (error) {
-    console.error('Failed to create email transporter:', error);
+  const user = process.env.EMAIL_USER?.trim();
+  const pass = process.env.EMAIL_PASSWORD?.trim();
+  if (
+    !user ||
+    !pass ||
+    user === "your-email@gmail.com" ||
+    pass === "your-app-password"
+  ) {
     return null;
   }
+  return nodemailer.createTransport({
+    service: EMAIL_CONFIG.service,
+    auth: { user, pass },
+  });
 };
 
-// Send contact form email
-export async function sendContactEmail(data: InsertContactMessage): Promise<boolean> {
+export type ContactEmailNotifyResult =
+  | "sent"
+  | "skipped_no_smtp"
+  | "failed";
+
+// Send contact form email (optional; EmailJS on the client is separate)
+export async function sendContactEmail(
+  data: InsertContactMessage,
+): Promise<ContactEmailNotifyResult> {
   const transporter = createTransporter();
-  
+
   if (!transporter) {
-    console.log('Email not configured. Message stored locally.');
-    return false;
+    return "skipped_no_smtp";
   }
 
   const htmlContent = `
@@ -94,8 +108,10 @@ ${data.message}
 Received at: ${new Date().toLocaleString()}
   `;
 
+  const fromUser = process.env.EMAIL_USER?.trim() || EMAIL_CONFIG.auth.user;
+
   const mailOptions = {
-    from: `"Portfolio Contact Form" <${EMAIL_CONFIG.auth.user}>`,
+    from: `"Portfolio Contact Form" <${fromUser}>`,
     to: RECIPIENT_EMAIL,
     subject: `📬 New Contact: ${data.subject}`,
     text: textContent,
@@ -105,12 +121,14 @@ Received at: ${new Date().toLocaleString()}
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent successfully to ${RECIPIENT_EMAIL}`);
-    return true;
+    return "sent";
   } catch (error) {
-    console.error('❌ Failed to send email:', error);
-    return false;
+    console.error("Failed to send contact notification email:", error);
+    return "failed";
   }
 }
+
+
+
 
 

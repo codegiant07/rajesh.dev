@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Briefcase, GraduationCap } from 'lucide-react';
+import { ExternalLink, Briefcase, GraduationCap } from 'lucide-react';
 
 export function Projects() {
   const professionalProjects = [
     {
       title: "MyJio: For Everything Jio",
       description: "End-to-end development of Entertainment Dashboard, Recharge feature, dynamic Home Dashboard carousel, and PieNews Dashboard with optimized rendering and state handling.",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      image: "https://images.sftcdn.net/images/t_app-cover-s,f_auto/p/a348cb84-3e32-11e8-9b6c-02420a000b1f/1962637759/myjio-jio-cricket-play-along-unnamed.png",
       technologies: ["React Native", "TypeScript", "Redux", "iOS", "Android"],
       github: "#",
       demo: "https://play.google.com/store/apps/details?id=com.jio.myjio",
@@ -15,7 +15,7 @@ export function Projects() {
     {
       title: "JioMart",
       description: "Implemented Address Management feature with add, edit, and selection flows. Worked on carousel animations and cart state management for seamless shopping experience.",
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      image: "https://myjiostatic.cdn.jio.com/cms/assets/jioapps/jiomart/download_s_2x.webp",
       technologies: ["React Native", "JavaScript", "State Management"],
       github: "#",
       demo: "https://play.google.com/store/apps/details?id=com.jiomart.app",
@@ -36,7 +36,7 @@ export function Projects() {
     {
       title: "Nearby EV Charging Suggestion",
       description: "A web application to promote Electric Vehicles by helping users find nearby charging stations. Users can see the names and locations of charging booths with an intuitive interface.",
-      image: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["HTML5", "CSS3", "JavaScript"],
       github: "#",
       demo: "#",
@@ -45,7 +45,7 @@ export function Projects() {
     {
       title: "Smart Word Converter",
       description: "Component-based single page application that performs multiple operations on words as per user requirements. Features an interactive UI with visualized front-end in ReactJS.",
-      image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["ReactJS", "JavaScript"],
       github: "#",
       demo: "#",
@@ -54,7 +54,7 @@ export function Projects() {
     {
       title: "Roll Dice App",
       description: "Cross-platform mobile app with user-friendly interface. Allows users to choose variety of dice types (8-sided, 6-sided, 4-sided). Features realistic rolling animations and sound effects.",
-      image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      image: "https://images.unsplash.com/photo-1522069213448-443a614da9b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Flutter", "Dart"],
       github: "#",
       demo: null,
@@ -195,17 +195,7 @@ function ProjectCard({ project, index, techColors }: { project: any; index: numb
           )}
         </div>
         
-        <div className="flex justify-between items-center">
-          <motion.a 
-            href={project.github}
-            className="text-primary hover:underline flex items-center"
-            whileHover={{ scale: 1.05 }}
-            data-testid={`project-github-${index}`}
-          >
-            <Github className="mr-2" size={16} />
-            View Code
-          </motion.a>
-          
+        <div className="flex justify-end items-center">
           {project.demo ? (
             <motion.a 
               href={project.demo}

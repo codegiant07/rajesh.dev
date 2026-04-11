@@ -4,14 +4,14 @@ import { Typewriter } from '@/components/ui/typewriter';
 
 export function Hero() {
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+    { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
     { icon: Code, href: "https://leetcode.com", label: "LeetCode" },
   ];
 
   const typewriterTexts = [
     'React Native Engineer | Mobile App Developer | Tech Enthusiast',
-    '1.5+ Years Experience | Building Apps for Millions of Users',
+    '2+ Years Experience | Building Apps for Millions of Users',
     'iOS & Android Development | Configuration-Driven UI Expert'
   ];
 

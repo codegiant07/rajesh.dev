@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendContactEmail } from "./email";
+import { log } from "./vite";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
@@ -11,18 +12,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertContactMessageSchema.parse(req.body);
       
-      // Store message in memory
       const message = await storage.createContactMessage(validatedData);
-      
-      // Send email notification (non-blocking)
-      sendContactEmail(validatedData).catch(err => {
-        console.error('Email sending failed:', err);
-      });
-      
-      res.json({ 
-        success: true, 
+
+      const notify = await sendContactEmail(validatedData);
+      if (notify === "skipped_no_smtp") {
+        log(
+          `POST /api/contact: stored id=${message.id}; inbox_email=skipped (no Gmail app password in EMAIL_USER/EMAIL_PASSWORD — fix EmailJS in browser or configure SMTP)`,
+        );
+      } else if (notify === "sent") {
+        log(`POST /api/contact: stored id=${message.id}; inbox_email=sent (SMTP)`);
+      } else {
+        log(`POST /api/contact: stored id=${message.id}; inbox_email=failed (check SMTP credentials)`);
+      }
+
+      res.json({
+        success: true,
         message: "Message sent successfully",
-        id: message.id 
+        id: message.id,
       });
     } catch (error) {
       if (error instanceof z.ZodError) {

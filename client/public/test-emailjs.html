@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #6366f1;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .credentials {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #ff4444;
+        }
+        .success {
+            color: #44ff44;
+        }
+        .warning {
+            color: #ffaa00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 EmailJS Direct Test</h1>
+        <p>This page tests EmailJS directly without React to isolate any issues.</p>
+        
+        <div class="credentials">
+            <strong>Current Credentials:</strong><br>
+            Service ID: <span id="serviceId">service_d63v7rf</span><br>
+            Template ID: <span id="templateId">template_b4xndyk</span><br>
+            Public Key: <span id="publicKey">wrt-TDpjlnXj8DZ8n</span>
+        </div>
+
+        <h3>Update Credentials (if needed):</h3>
+        <input type="text" id="inputServiceId" placeholder="Service ID" value="service_d63v7rf">
+        <input type="text" id="inputTemplateId" placeholder="Template ID" value="template_b4xndyk">
+        <input type="text" id="inputPublicKey" placeholder="Public Key" value="wrt-TDpjlnXj8DZ8n">
+        <button onclick="updateCredentials()">Update Credentials</button>
+
+        <h3>Test Email:</h3>
+        <input type="text" id="testName" placeholder="Your Name" value="Test User">
+        <input type="email" id="testEmail" placeholder="Your Email" value="test@example.com">
+        <input type="text" id="testSubject" placeholder="Subject" value="Test Message">
+        <textarea id="testMessage" placeholder="Message" rows="4">This is a test message from the EmailJS test page.</textarea>
+        
+        <button onclick="testEmailJS()" id="sendBtn">🚀 Send Test Email</button>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        let serviceId = 'service_d63v7rf';
+        let templateId = 'template_b4xndyk';
+        let publicKey = 'wrt-TDpjlnXj8DZ8n';
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function updateCredentials() {
+            serviceId = document.getElementById('inputServiceId').value.trim();
+            templateId = document.getElementById('inputTemplateId').value.trim();
+            publicKey = document.getElementById('inputPublicKey').value.trim();
+            
+            document.getElementById('serviceId').textContent = serviceId;
+            document.getElementById('templateId').textContent = templateId;
+            document.getElementById('publicKey').textContent = publicKey;
+            
+            log('✅ Credentials updated!', 'success');
+        }
+
+        async function testEmailJS() {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            
+            document.getElementById('log').innerHTML = '';
+            
+            log('🔧 Starting EmailJS test...');
+            log('📋 Service ID: ' + serviceId);
+            log('📋 Template ID: ' + templateId);
+            log('📋 Public Key: ' + publicKey);
+            
+            // Get form data
+            const name = document.getElementById('testName').value;
+            const email = document.getElementById('testEmail').value;
+            const subject = document.getElementById('testSubject').value;
+            const message = document.getElementById('testMessage').value;
+            
+            if (!name || !email || !message) {
+                log('❌ Please fill in all required fields', 'error');
+                sendBtn.disabled = false;
+                sendBtn.textContent = '🚀 Send Test Email';
+                return;
+            }
+            
+            log('📧 Preparing to send email...');
+            
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                subject: subject,
+                message: message
+            };
+            
+            log('📦 Template params: ' + JSON.stringify(templateParams));
+            
+            try {
+                log('🚀 Sending email via EmailJS...', 'warning');
+                
+                // Method 1: Using emailjs.send with public key
+                const response = await emailjs.send(
+                    serviceId,
+                    templateId,
+                    templateParams,
+                    publicKey
+                );
+                
+                log('✅ SUCCESS! Email sent successfully!', 'success');
+                log('📬 Response status: ' + response.status, 'success');
+                log('📬 Response text: ' + response.text, 'success');
+                log('✉️ Check your email: rajeshchouhancs25@gmail.com', 'success');
+                
+            } catch (error) {
+                log('❌ FAILED! Error occurred:', 'error');
+                log('Error type: ' + error.name, 'error');
+                log('Error message: ' + error.message, 'error');
+                
+                if (error.text) {
+                    log('Error text: ' + error.text, 'error');
+                }
+                if (error.status) {
+                    log('Error status: ' + error.status, 'error');
+                }
+                
+                log('', 'error');
+                log('🔍 TROUBLESHOOTING:', 'warning');
+                
+                if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+                    log('⚠️ CORS Error detected!', 'error');
+                    log('', 'warning');
+                    log('This usually means one of these issues:', 'warning');
+                    log('1. ❌ Public Key is INCORRECT', 'warning');
+                    log('2. ❌ Service ID is INCORRECT or service is not connected', 'warning');
+                    log('3. ❌ Template ID is INCORRECT or template is not active', 'warning');
+                    log('4. ❌ EmailJS account email is not verified', 'warning');
+                    log('5. ❌ EmailJS account has issues (check dashboard for warnings)', 'warning');
+                    log('', 'warning');
+                    log('📝 ACTION ITEMS:', 'warning');
+                    log('1. Go to: https://dashboard.emailjs.com/', 'warning');
+                    log('2. Check Account → General → Copy PUBLIC KEY exactly', 'warning');
+                    log('3. Check Email Services → Copy SERVICE ID exactly', 'warning');
+                    log('4. Check Email Templates → Copy TEMPLATE ID exactly', 'warning');
+                    log('5. Make sure Gmail service shows "Connected" status', 'warning');
+                    log('6. Make sure template is "Active"', 'warning');
+                    log('7. Check for any red warnings in dashboard', 'warning');
+                }
+                
+                log('', 'error');
+                log('Full error object:', 'error');
+                log(JSON.stringify(error, null, 2), 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '🚀 Send Test Email';
+            }
+        }
+        
+        // Initialize EmailJS on page load
+        (function() {
+            log('🎉 EmailJS Test Page Loaded');
+            log('📚 EmailJS library loaded from CDN');
+            log('Ready to test! Click "Send Test Email" when ready.');
+        })();
+    </script>
+</body>
+</html>
+
