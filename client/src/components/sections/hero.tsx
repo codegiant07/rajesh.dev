@@ -71,7 +71,7 @@ export function Hero() {
           </motion.button>
           
           <motion.a 
-            href="/resume.pdf"
+            href={`${import.meta.env.BASE_URL}resume.pdf`}
             download="Rajesh_Chouhan_Resume.pdf"
             className="px-8 py-4 glass border border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-white transition-all duration-300 inline-block"
             whileHover={{ scale: 1.05 }}
