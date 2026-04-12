@@ -77,34 +77,33 @@ export function Navbar() {
         </div>
         
         {/* Mobile menu */}
-        <motion.div 
-          className={`md:hidden glass ${isMobileMenuOpen ? 'block' : 'hidden'}`}
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ 
-            opacity: isMobileMenuOpen ? 1 : 0, 
-            height: isMobileMenuOpen ? 'auto' : 0 
-          }}
-          transition={{ duration: 0.3 }}
-          data-testid="mobile-menu"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
-              <motion.button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ${
-                  activeSection === item.id 
-                    ? 'nav-active text-white' 
-                    : 'text-foreground hover:bg-primary/20'
-                }`}
-                whileHover={{ x: 10 }}
-                data-testid={`mobile-nav-link-${item.id}`}
-              >
-                {item.label}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="md:hidden glass"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            data-testid="mobile-menu"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ${
+                    activeSection === item.id
+                      ? 'nav-active text-white'
+                      : 'text-foreground hover:bg-primary/20'
+                  }`}
+                  data-testid={`mobile-nav-link-${item.id}`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </motion.nav>
     </>
   );

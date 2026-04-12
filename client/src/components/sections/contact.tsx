@@ -184,7 +184,7 @@ export function Contact() {
   const socialLinks = [
     { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
-    { icon: Code, href: "https://leetcode.com", label: "LeetCode" },
+    { icon: Code, href: "https://leetcode.com/u/rajeshchouhancs25/", label: "LeetCode" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   ];
 

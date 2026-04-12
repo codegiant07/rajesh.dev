@@ -6,7 +6,7 @@ export function Hero() {
   const socialLinks = [
     { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
-    { icon: Code, href: "https://leetcode.com", label: "LeetCode" },
+    { icon: Code, href: "https://leetcode.com/u/rajeshchouhancs25/", label: "LeetCode" },
   ];
 
   const typewriterTexts = [
@@ -60,6 +60,7 @@ export function Hero() {
           transition={{ duration: 1, delay: 1 }}
         >
           <motion.button 
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
             className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
