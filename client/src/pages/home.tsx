@@ -4,6 +4,7 @@ import { Navbar } from '@/components/navigation/navbar';
 import { Hero } from '@/components/sections/hero';
 import { About } from '@/components/sections/about';
 import { Skills } from '@/components/sections/skills';
+import { Highlights } from '@/components/sections/highlights';
 import { Projects } from '@/components/sections/projects';
 import { Experience } from '@/components/sections/experience';
 import { Contact } from '@/components/sections/contact';
@@ -37,9 +38,10 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
-      <Skills />
-      <Projects />
       <Experience />
+      <Highlights />
+      <Projects />
+      <Skills />
       <Contact />
       
       {/* Footer */}
@@ -53,7 +55,7 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-muted-foreground mb-4">© 2026 Rajesh Chouhan. All rights reserved.</p>
-          <p className="text-sm text-muted-foreground">Built with passion for technology and innovation</p>
+          <p className="text-sm text-muted-foreground">Built with React, TypeScript, Tailwind CSS and Framer Motion</p>
         </div>
       </motion.footer>
     </div>

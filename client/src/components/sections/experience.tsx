@@ -7,33 +7,35 @@ export function Experience() {
     company: "Jio Platforms Limited",
     date: "Dec 2023 – Present",
     responsibilities: [
-      "Developed and maintained scalable React Native mobile applications such as MyJio, JioMart, and Sephora, used by millions of users",
-      "Implemented dynamic and configurable UI components (e.g., carousels and dashboards) driven by backend configuration, reducing hard-coded logic and improving reusability",
-      "Optimized performance and responsiveness by identifying bottlenecks within the codebase",
-      "Conducted code reviews, executed unit tests, and collaborated with backend, design, QA, and product teams to deliver reliable, production-ready features in Agile sprints",
-      "Debugged and resolved production issues, improving application stability and reducing crash rates"
+      { lead: "MyJio features:", text: "Developed and maintained features with JavaScript, TypeScript, reusable UI components and a scalable frontend architecture." },
+      { lead: "SDUI engine (30% faster rollouts):", text: "Architected a Server-Driven UI renderer mapping backend JSON layouts to React Native components, so UI ships without app-store releases. Built a datasource enrichment pipeline injecting JWT tokens, user profiles, coins and recommendations." },
+      { lead: "Performance (20+ widget sections):", text: "Cut unnecessary re-renders using React Hooks, React.memo, useCallback and FlatList virtualization." },
+      { lead: "State & APIs:", text: "Integrated REST APIs and managed application state with Redux Toolkit and a reusable component architecture." },
+      { lead: "New Architecture:", text: "Contributed to migrating the native bridge layer to JSI, TurboModules and Fabric across Android (Kotlin) and iOS (Swift)." },
+      { lead: "Production stability:", text: "Resolved crashes, API issues, WebView lifecycle bugs and Xcode build/release problems through log-driven root-cause analysis with backend, design and QA teams." },
+      { lead: "Security & delivery:", text: "Addressed VAPT findings (token auth, encrypted storage, API communication); contributed to Azure Pipelines CI/CD, Jest unit testing and CodePush (OTA) releases." }
     ]
   };
 
   const certifications = [
     {
       icon: Award,
-      title: "Mobile Development Expertise",
-      subtitle: "iOS & Android App Development",
-      category: "TECHNICAL SKILLS",
-      color: "text-blue-500"
+      title: "A* Performance Rating",
+      subtitle: "Outstanding contribution to the MyJio super-app",
+      category: "RECOGNITION",
+      color: "text-yellow-500"
     },
     {
       icon: GraduationCap,
-      title: "State Management",
-      subtitle: "Redux & React Hooks",
-      category: "TECHNICAL SKILLS",
+      title: "B.Tech CSE - CGPA 8.78",
+      subtitle: "Gyan Ganga College of Technology, Jabalpur (2019-2023)",
+      category: "EDUCATION",
       color: "text-purple-500"
     },
     {
       icon: Network,
-      title: "Production Experience",
-      subtitle: "Apps serving millions of users",
+      title: "New Architecture Migration",
+      subtitle: "JSI, TurboModules and Fabric across Android & iOS",
       category: "PROFESSIONAL",
       color: "text-green-500"
     }
@@ -50,9 +52,9 @@ export function Experience() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text" data-testid="experience-title">
-            Experience & Certifications
+            Experience
           </h2>
-          <p className="text-xl text-muted-foreground">My professional journey</p>
+          <p className="text-xl text-muted-foreground">Where I have built and shipped at scale</p>
         </motion.div>
         
         <div className="space-y-12">
@@ -104,7 +106,10 @@ export function Experience() {
                       data-testid={`responsibility-${index}`}
                     >
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0" />
-                      {responsibility}
+                      <span>
+                        <span className="font-semibold text-foreground">{responsibility.lead}</span>{' '}
+                        {responsibility.text}
+                      </span>
                     </motion.li>
                   ))}
                 </ul>

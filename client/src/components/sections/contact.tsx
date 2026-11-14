@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Github, Linkedin, Code, Twitter, Send, CheckCircle, XCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Code, Send, CheckCircle, XCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect } from 'react';
@@ -183,13 +183,12 @@ export function Contact() {
 
   const socialLinks = [
     { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-info/", label: "LinkedIn" },
     { icon: Code, href: "https://leetcode.com/u/rajeshchouhancs25/", label: "LeetCode" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   ];
 
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
       <div className="max-w-4xl mx-auto">
         <motion.div 
           className="text-center mb-16"
@@ -201,7 +200,7 @@ export function Contact() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text" data-testid="contact-title">
             Get In Touch
           </h2>
-          <p className="text-xl text-muted-foreground">Let's discuss opportunities and collaboration</p>
+          <p className="text-xl text-muted-foreground">Open to new opportunities and collaborations. I usually reply within a day.</p>
         </motion.div>
         
         <div className="grid lg:grid-cols-2 gap-12">
@@ -222,7 +221,7 @@ export function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <Mail className="text-xl text-blue-500 mr-4" />
-                  <span className="text-muted-foreground">rajeshchouhancs25@gmail.com</span>
+                  <a href="mailto:rajeshchouhancs25@gmail.com" className="text-muted-foreground hover:text-primary">rajeshchouhancs25@gmail.com</a>
                 </motion.div>
                 <motion.div 
                   className="flex items-center"
@@ -230,7 +229,7 @@ export function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <Phone className="text-xl text-green-500 mr-4" />
-                  <span className="text-muted-foreground">+91-9399690498</span>
+                  <a href="tel:+919399690498" className="text-muted-foreground hover:text-primary">+91-9399690498</a>
                 </motion.div>
                 <motion.div 
                   className="flex items-center"
@@ -244,7 +243,7 @@ export function Contact() {
             </div>
             
             <div className="glass rounded-2xl p-6" data-testid="social-links">
-              <h3 className="text-2xl font-bold mb-6 text-primary">Follow Me</h3>
+              <h3 className="text-2xl font-bold mb-6 text-primary">Find Me Online</h3>
               <div className="flex space-x-4">
                 {socialLinks.map((link, index) => {
                   const Icon = link.icon;
@@ -252,6 +251,8 @@ export function Contact() {
                     <motion.a
                       key={index}
                       href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       whileTap={{ scale: 0.9 }}

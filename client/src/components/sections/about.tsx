@@ -3,11 +3,18 @@ import { Trophy, Medal, Star, Award, Crown } from 'lucide-react';
 
 export function About() {
   const achievements = [
-    { icon: Trophy, text: "Solved 250+ DSA Problems on LeetCode & GeeksforGeeks", color: "text-yellow-500" },
-    { icon: Star, text: "Apps serving millions of users with stable features", color: "text-blue-500" },
-    { icon: Medal, text: "Resolved critical production crashes in iOS & React Native", color: "text-green-500" },
+    { icon: Crown, text: "A* performance rating at Jio Platforms for the MyJio super-app", color: "text-red-500" },
+    { icon: Star, text: "Core contributor to MyJio - 500M+ downloads", color: "text-blue-500" },
+    { icon: Medal, text: "Built an SDUI engine that cut feature rollout time by 30%", color: "text-green-500" },
     { icon: Award, text: "Central Sector Scholarship - Top 10% CSE Batch", color: "text-purple-500" },
-    { icon: Crown, text: "1.5+ Years Experience at Jio Platforms Limited", color: "text-red-500" },
+    { icon: Trophy, text: "Solved 250+ DSA Problems on LeetCode & GeeksforGeeks", color: "text-yellow-500" },
+  ];
+
+  const strengths = [
+    { title: "Architecture ownership", text: "Designed MyJio's Server-Driven UI engine and its datasource enrichment pipeline." },
+    { title: "Performance", text: "Memoization, stable callbacks and list virtualization across 20+ widget sections." },
+    { title: "Cross-platform depth", text: "React Native plus native iOS (Swift/SwiftUI) and Android (Kotlin) bridges, including the New Architecture." },
+    { title: "Production quality", text: "VAPT fixes, log-driven crash RCA, Jest tests, CI/CD and CodePush releases." },
   ];
 
   const education = [
@@ -33,8 +40,7 @@ export function About() {
             About Me
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            React Native Engineer with 1.5+ years of experience building and maintaining large-scale mobile applications used by millions of users. 
-            Strong in configuration-driven UI, state management, performance optimization, and production issue debugging across iOS and Android platforms.
+            Software Development Engineer with 3+ years at Jio Platforms, specializing in JavaScript, TypeScript and React Native. Core contributor to MyJio (500M+ downloads), building reusable UI components, Server-Driven UI, state management and secure, scalable apps - with hands-on native iOS (Swift/SwiftUI) and Android bridge experience.
           </p>
         </motion.div>
         
@@ -109,19 +115,15 @@ export function About() {
               transition={{ duration: 0.3 }}
               data-testid="workspace-showcase"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                alt="Modern coding setup with multiple monitors" 
-                className="rounded-xl shadow-lg w-full h-auto" 
-              />
-              <div className="mt-6">
-                <h3 className="text-2xl font-bold mb-4 text-primary">My Workspace</h3>
-                <p className="text-muted-foreground">
-                  I believe in creating an environment that fosters creativity and productivity. 
-                  My setup includes multiple monitors for efficient coding, comfortable ergonomics for long coding sessions, 
-                  and all the tools needed to bring ideas to life.
-                </p>
-              </div>
+              <h3 className="text-2xl font-bold mb-6 text-primary">What I bring</h3>
+              <ul className="space-y-5">
+                {strengths.map((item) => (
+                  <li key={item.title}>
+                    <p className="font-semibold text-foreground">{item.title}</p>
+                    <p className="text-muted-foreground text-sm mt-1">{item.text}</p>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           </motion.div>
         </div>

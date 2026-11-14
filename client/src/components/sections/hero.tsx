@@ -5,18 +5,25 @@ import { Typewriter } from '@/components/ui/typewriter';
 export function Hero() {
   const socialLinks = [
     { icon: Github, href: "https://github.com/codegiant07", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-c-48103a205/", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/rajesh-info/", label: "LinkedIn" },
     { icon: Code, href: "https://leetcode.com/u/rajeshchouhancs25/", label: "LeetCode" },
   ];
 
+  const impact = [
+    { value: '3+', label: 'Years at Jio Platforms' },
+    { value: '500M+', label: 'MyJio downloads' },
+    { value: '30%', label: 'Faster feature rollout' },
+    { value: '20+', label: 'Widget sections optimized' },
+  ];
+
   const typewriterTexts = [
-    'React Native Engineer | Mobile App Developer | Tech Enthusiast',
-    '2+ Years Experience | Building Apps for Millions of Users',
-    'iOS & Android Development | Configuration-Driven UI Expert'
+    'Software Development Engineer | React Native & TypeScript',
+    '3+ Years at Jio Platforms | Core Contributor to MyJio (500M+ Downloads)',
+    'SDUI Architecture | Native Bridges | New Architecture (JSI, TurboModules, Fabric)'
   ];
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <section id="home" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-16">
       {/* Background Animation */}
       <motion.div 
         className="fixed inset-0 parallax-bg"
@@ -44,8 +51,29 @@ export function Hero() {
           <span className="gradient-text">Rajesh Chouhan</span>
         </motion.h1>
         
+        <motion.p
+          className="text-lg md:text-2xl font-semibold text-foreground mb-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          data-testid="hero-role"
+        >
+          Software Engineer · React Native, TypeScript &amp; Mobile Architecture
+        </motion.p>
+
+        <motion.div
+          className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-sm text-green-300 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          data-testid="hero-availability"
+        >
+          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+          Open to new opportunities
+        </motion.div>
+
         <motion.div 
-          className="text-xl md:text-2xl text-muted-foreground mb-8 h-16"
+          className="text-lg md:text-xl text-muted-foreground mb-8 h-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -83,6 +111,22 @@ export function Hero() {
           </motion.a>
         </motion.div>
         
+        {/* Impact strip */}
+        <motion.dl
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.2 }}
+          data-testid="hero-impact"
+        >
+          {impact.map((item) => (
+            <div key={item.label} className="glass rounded-xl px-3 py-3">
+              <dd className="text-2xl md:text-3xl font-black gradient-text">{item.value}</dd>
+              <dt className="text-xs text-muted-foreground mt-1">{item.label}</dt>
+            </div>
+          ))}
+        </motion.dl>
+
         {/* Social Links */}
         <motion.div 
           className="flex justify-center space-x-6"
@@ -96,6 +140,8 @@ export function Hero() {
               <motion.a
                 key={index}
                 href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-2xl text-muted-foreground hover:text-primary transition-colors duration-300"
                 whileHover={{ scale: 1.2, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}

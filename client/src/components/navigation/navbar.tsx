@@ -6,9 +6,10 @@ import { useScrollSpy } from '@/hooks/use-scroll-spy';
 const navItems = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
+  { id: 'highlights', label: 'Highlights' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -69,6 +70,8 @@ export function Navbar() {
                 className="text-foreground hover:text-primary focus:outline-none"
                 whileTap={{ scale: 0.95 }}
                 data-testid="mobile-menu-button"
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </motion.button>
